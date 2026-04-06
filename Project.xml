@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project xmlns="http://lime.openfl.org/project/1.0.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://lime.openfl.org/project/1.0.4 http://lime.openfl.org/xsd/project-1.0.4.xsd">
+
+	<!-- _________________________ Application Settings _________________________ -->
+	<app title="Cockroach Dream" file="CockroachDream" version="0.0.1" company="Altertoriel"/>
+	<app packageName="com.altertoriel.cockroachdream" package="com.altertoriel.cockroachdream"/>
+	<app main="Main" preloader="flixel.system.FlxPreloader"/>
+
+	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
+		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
+	<app preloader="flixel.system.FlxPreloader" />
+
+	<!-- ____________________________ Window Settings ___________________________ -->
+
+	<!--These window settings apply to all targets-->
+	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" />
+	<window width="640" height="480" fps="60" background="#000000" hardware="true" vsync="false" />
+
+	<!-- _____________________________ Path Settings ____________________________ -->
+
+	<set name="BUILD_DIR" value="export/debug" if="debug"/>
+	<set name="BUILD_DIR" value="export/release" unless="debug"/>
+
+	<source path="src"/>
+	<assets path="assets"/>
+
+	<!-- _______________________________ Libraries ______________________________ -->
+
+	<haxelib name="flixel" />
+	<haxelib name="flixel-animate"/>
+
+	<!-- ______________________________ Haxedefines _____________________________ -->
+	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
+	<haxedef name="FLX_NO_TOUCH" if="desktop" />
+	<haxedef name="FLX_NO_FOCUS_LOST_SCREEN" />
+
+	<!-- Haxe 4.3.0+: Enable pretty syntax errors and stuff. -->
+	<!-- pretty (haxeflixel default), indent, classic (haxe compiler default) -->
+	<haxedef name="message.reporting" value="pretty" />
+
+	<section unless="debug">
+		<haxedef name="no-deprecation-warnings"/> <!-- No deprecation warnings. -->
+		<haxedef name="FLX_NO_DEBUG"/> <!-- Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
+		<haxedef name="analyzer-optimize"/>
+	</section>
+
+	<section if="CRASH_HANDLER cpp">
+		<haxedef name="HXCPP_CHECK_POINTER"/>
+		<haxedef name="HXCPP_STACK_LINE"/>
+		<haxedef name="HXCPP_STACK_TRACE"/>
+		<haxedef name="HXCPP_CATCH_SEGV"/>
+	</section>
+
+	<!-- _________________________________ Custom _______________________________ -->
+
+	<!--Place custom nodes like icons here-->
+</project>
