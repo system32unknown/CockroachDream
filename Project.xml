@@ -23,7 +23,9 @@
 	<set name="BUILD_DIR" value="export/release" unless="debug"/>
 
 	<source path="src"/>
-	<assets path="assets"/>
+	<assets path="assets/images"/>
+	<assets path="assets/music"/>
+	<assets path="assets/sounds"/>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Funkin Packer v0.1.3 https://neeeoo.github.io/funkin-packer/
+-->
+<TextureAtlas imagePath="face.png" width="334" height="380">
+	<SubTexture name="awake1" x="1" y="1" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="awake2" x="84" y="1" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="awake3" x="1" y="127" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="dead" x="84" y="127" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="shock1" x="167" y="1" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="shock2" x="167" y="127" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="shock3" x="250" y="1" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="shock4" x="250" y="127" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="sleep" x="84" y="253" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="waking1" x="167" y="253" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="waking2" x="250" y="253" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+	<SubTexture name="shock5" x="1" y="253" width="83" height="126" frameX="-9" frameY="-2" frameWidth="100" frameHeight="128"/>
+</TextureAtlas>
