@@ -1,7 +1,153 @@
 package objects;
 
-class Cockroach extends flixel.FlxSprite {
-    override public function new(x:Float, y:Float) {
-        super(x, y);
-    }
+enum Roach_States {
+	STOP;
+	MOVE;
+	HIT;
+}
+
+class Cockroach extends FlxSprite {
+	public var hit_ok:Bool = false;
+	public var touch:Bool = false;
+
+	public var spd:Float = 0;
+	public var spd_max:Int = 0;
+	public var dir:Int = 0;
+
+	public var cnt:Int = 0;
+	public var pat:Int = 0;
+	public var wait_max:Float = 0;
+
+	public var addx:Array<Float> = [];
+	public var addy:Array<Float> = [];
+
+	public function new(x:Float, y:Float) {
+		super(x, y);
+		var graph:flixel.graphics.FlxGraphic = Paths.image('cockroach');
+		loadGraphic(graph, true, 48, 48);
+		animation.add('cock', [for (i in 0...frames.frames.length) i], 0, false);
+
+		visible = false;
+
+		initDirections();
+		resetState();
+	}
+
+	function resetState():Void {
+		cnt = 0;
+		pat = 0;
+		wait_max = 50 + FlxG.random.float(0, 50);
+	}
+
+	public function appear():Void {
+		visible = true;
+		hit_ok = true;
+
+		switch (FlxG.random.int(0, 2)) {
+			case 0:
+				x = -24;
+				y = FlxG.random.float(0, 480);
+
+			case 1:
+				x = 664;
+				y = FlxG.random.float(0, 480);
+
+			default:
+				x = FlxG.random.float(0, 640);
+				y = -24;
+		}
+
+		spd_max = 4 + FlxG.random.int(0, 4);
+		dir = getDir(x, y, 320, 240);
+
+		animation.play("stop");
+		resetState();
+	}
+
+	public function runaway():Void {
+		var mx:Int = FlxG.mouse.x;
+		var my:Int = FlxG.mouse.y;
+
+		final range:Int = 100;
+
+		var dx:Float = mx - x;
+		var dy:Float = my - y;
+
+		if (Math.abs(dx) > range || Math.abs(dy) > range) return;
+		dir = getDir(mx, my, x, y);
+
+		spd = 7 + FlxG.random.int(0, 4);
+		animation.play("move");
+	}
+
+	override public function update(elapsed:Float):Void {
+		super.update(elapsed);
+
+		cnt++;
+
+		if (cnt % 3 == 0)
+			pat = (pat + 1) % 4;
+
+		animation.frameIndex = dir * 8 + pat;
+
+		if (touch) {
+			// replace this with your actual callback
+			// FlxG.state or parent system
+			// Example:
+			// cast(FlxG.state, PlayState).tell_touch();
+		}
+
+		if (cnt > wait_max) {
+			var r:Float = FlxG.random.float();
+
+			if (r < 0.25) {
+				// go toward center
+				dir = getDir(x, y, 320, 240);
+			} else {
+				// random turn
+				dir += (FlxG.random.bool()) ? -1 : 1;
+				if (dir < 0) dir = 7;
+				if (dir > 7) dir = 0;
+			}
+
+			spd = spd_max;
+			animation.play("move");
+		} else runaway();
+
+		// movement using 8-direction table
+        velocity.set(addx[dir] * spd * 60, addy[dir] * spd * 60);
+	}
+
+	public function getDir(x1:Float, y1:Float, x2:Float, y2:Float):Int {
+		var dx:Float = x2 - x1;
+		var dy:Float = y2 - y1;
+
+		var adx:Float = Math.abs(dx);
+		var ady:Float = Math.abs(dy);
+
+		if (dx < 0) {
+			if (dy < 0) return (ady > adx) ? 0 : 1;
+			return (adx > ady) ? 2 : 3;
+		}
+
+		if (dy > 0) return (ady > adx) ? 4 : 5;
+
+		return (adx > ady) ? 6 : 7;
+	}
+
+	function initDirections():Void {
+		var PI:Float = Math.PI;
+		for (i in 0...8) {
+			var rotation:Float = PI * (i * 2 + 1) / 8;
+			addx.push(-Math.sin(rotation));
+			addy.push(-Math.cos(rotation));
+		}
+	}
+
+	public function hit():Void {
+		if (!hit_ok) return;
+
+		hit_ok = false;
+		animation.play("hit");
+	}
 }

@@ -61,13 +61,6 @@ class FPSUtil {
 		cacheCount = curCount;
 	}
 
-	/**
-	 * Adjusts the value based on the reference FPS.
-	 */
-	public static inline function fpsAdjust(value:Float, ?referenceFps:Float = 60):Float {
-		return value * (referenceFps * FlxG.elapsed);
-	}
-
 	public function lagged():Bool {
 		return curFPS < FlxG.drawFramerate * .5;
 	}

@@ -72,10 +72,7 @@ class CrashHandler {
 		var errMsg:String = getError();
 		errMsg += '\nPlatform: ${System.platformLabel} ${System.platformVersion}';
 		errMsg += '\nFlixel Current State: ${Type.getClassName(Type.getClass(FlxG.state))}';
-		errMsg += '\nUncaught Error: $message\nPlease report this error to the GitHub page: https://github.com/system32unknown/FNF-BabyShark\n\nCustom Crash Handler written by: sqirra-rng and Codename Engine Team and Altertoriel';
-		#if macro
-		errMsg += '\nHaxe: ${defines['haxe']} / Flixel: ${defines['flixel']}\nOpenFL: ${defines['openfl']} / Lime: ${defines['lime']}';
-		#end
+		errMsg += '\nUncaught Error: $message';
 
 		try {
 			if (!FileSystem.exists("./crash/")) FileSystem.createDirectory("./crash/");
@@ -85,7 +82,7 @@ class CrashHandler {
 			Sys.println('Crash dump saved in ${haxe.io.Path.normalize(path)}');
 		} catch (e:Dynamic) Sys.println('Error!\nCouldn\'t save the crash dump because:\n$e');
 
-		FlxG.stage.application.window.alert("Alter Engine Crash Handler", errMsg);
+		FlxG.stage.application.window.alert("Crash Handler", errMsg);
 		#if DISCORD_ALLOWED DiscordClient.shutdown(); #end
 		System.exit(1);
 	}
