@@ -31,7 +31,6 @@
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-animate"/>
-	<haxelib name="hscript-improved" if="debug"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
@@ -47,7 +46,10 @@
 		<haxedef name="FLX_NO_DEBUG"/> <!-- Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 		<haxedef name="analyzer-optimize"/>
 	</section>
-
+	<section if="debug">
+		<haxeflag name="--macro" value="macros.FlxMacro.initMacros()"/>
+		<haxelib name="hscript-improved"/>
+	</section>
 
 	<section if="CRASH_HANDLER cpp">
 		<haxedef name="HXCPP_CHECK_POINTER"/>
@@ -55,8 +57,4 @@
 		<haxedef name="HXCPP_STACK_TRACE"/>
 		<haxedef name="HXCPP_CATCH_SEGV"/>
 	</section>
-
-	<!-- _________________________________ Custom _______________________________ -->
-
-	<!--Place custom nodes like icons here-->
 </project>

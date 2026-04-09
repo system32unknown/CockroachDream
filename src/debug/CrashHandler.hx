@@ -7,13 +7,6 @@ import openfl.errors.Error;
 import openfl.events.ErrorEvent;
 import openfl.events.UncaughtErrorEvent;
 
-#if sys
-import sys.FileSystem;
-import sys.io.File;
-#end
-
-using StringTools;
-
 /**
  * Global crash handler for capturing and logging uncaught errors.
  *
@@ -68,11 +61,15 @@ class CrashHandler {
 	 */
 	static function onError(message:String):Void {
 		final path:String = './crash/${FlxG.stage.application.meta.get('file')}_${Date.now().toString().replace(" ", "_").replace(":", "'")}.txt';
+		final defines:Map<String, Dynamic> = macros.DefinesMacro.defines;
 
 		var errMsg:String = getError();
 		errMsg += '\nPlatform: ${System.platformLabel} ${System.platformVersion}';
 		errMsg += '\nFlixel Current State: ${Type.getClassName(Type.getClass(FlxG.state))}';
 		errMsg += '\nUncaught Error: $message';
+		#if macro
+		errMsg += '\nHaxe: ${defines['haxe']} / Flixel: ${defines['flixel']}\nOpenFL: ${defines['openfl']} / Lime: ${defines['lime']}';
+		#end
 
 		try {
 			if (!FileSystem.exists("./crash/")) FileSystem.createDirectory("./crash/");

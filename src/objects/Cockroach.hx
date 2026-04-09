@@ -28,6 +28,12 @@ class Cockroach extends FlxSprite {
 	var originalYOffset:Float = 0.0;
 	final oy:Float = -28;
 
+	public var cockFrame(default, set):Int = 0;
+	@:noCompletion function set_cockFrame(v:Int) {
+		if (animation != null) animation.frameIndex = dir * 8 + v;
+		return v;
+	}
+
 	public function new(x:Float, y:Float) {
 		super(x, y);
 		var graph:flixel.graphics.FlxGraphic = Paths.image('cockroach');
@@ -100,7 +106,7 @@ class Cockroach extends FlxSprite {
 				if (cnt % 3 == 0)
 					pat = (pat + 1) % 4;
 
-				animation.frameIndex = dir * 8 + pat;
+				cockFrame = pat;
 
 				if (touch) {
 					// replace this with your actual callback
@@ -110,24 +116,15 @@ class Cockroach extends FlxSprite {
 				}
 
 				if (cnt > wait_max) {
-					var r:Float = FlxG.random.float();
-
-					if (r < 0.25) {
-						// go toward center
-						dir = getDir(x, y, 320, 240);
-					} else {
-						// random turn
-						dir += (FlxG.random.bool()) ? -1 : 1;
-						if (dir < 0) dir = 7;
-						if (dir > 7) dir = 0;
-					}
+					if (FlxG.random.float() < 0.25) dir = getDir(x, y, 320, 240); // go toward center
+					else dir = FlxMath.wrap(dir + (FlxG.random.bool() ? -1 : 1), 0, 7); // random turn
 
 					spd = spd_max;
 					state = MOVE;
 				} else runaway();
 			case MOVE:
 				velocity.set(addx[dir] * spd * 60, addy[dir] * spd * 60);
-				animation.frameIndex = dir * 8 + 4 + pat;
+				cockFrame = 4 + pat;
 
 				pat++;
 				if (pat >= 3) pat = 0;
@@ -149,9 +146,9 @@ class Cockroach extends FlxSprite {
 				offset.y += 5;
 
 				if (dir >= 8) dir = 0;
-				animation.frameIndex = dir * 8 + 7;
+				cockFrame = 7;
 				cnt++;
-				if (cnt > 30) animation.frameIndex = dir * 8 + 6;
+				if (cnt > 30) cockFrame = 6;
 
 			case NONE:
 		}
