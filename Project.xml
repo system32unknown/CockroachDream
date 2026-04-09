@@ -31,6 +31,7 @@
 
 	<haxelib name="flixel" />
 	<haxelib name="flixel-animate"/>
+	<haxelib name="hscript-improved" if="debug"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
@@ -46,6 +47,7 @@
 		<haxedef name="FLX_NO_DEBUG"/> <!-- Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 		<haxedef name="analyzer-optimize"/>
 	</section>
+
 
 	<section if="CRASH_HANDLER cpp">
 		<haxedef name="HXCPP_CHECK_POINTER"/>
