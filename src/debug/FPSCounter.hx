@@ -42,8 +42,7 @@ class FPSCounter extends openfl.text.TextField {
 		autoSize = LEFT;
 		selectable = mouseEnabled = false;
 		text = "0FPS";
-		defaultTextFormat = new openfl.text.TextFormat(fontName, 12, -1);
-		defaultTextFormat.align = JUSTIFY;
+		defaultTextFormat = new openfl.text.TextFormat(fontName, 12, -1, JUSTIFY);
 
 		sharpness = 100;
 		multiline = true;
@@ -56,7 +55,6 @@ class FPSCounter extends openfl.text.TextField {
 	}
 
 	var deltaTimeout:Float = .0;
-
 	override function __enterFrame(deltaTime:Float):Void {
 		if (!visible || flixel.FlxG.autoPause && !stage.nativeWindow.active) return;
 		fpsManager.update(deltaTime);

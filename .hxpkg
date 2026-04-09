@@ -1,0 +1,30 @@
+[
+	{
+		"profile": "default",
+		"pkgs": [
+			{
+				"name": "lime"
+			},
+			{
+				"name": "openfl",
+				"link": "https://github.com/system32unknown/openfl"
+			},
+			{
+				"name": "flixel",
+				"link": "https://github.com/system32unknown/flixel-alter"
+			},
+			{
+				"name": "flixel-animate",
+				"link": "https://github.com/MaybeMaru/flixel-animate"
+			},
+			{
+				"name": "hscript-improved",
+				"link": "https://github.com/system32unknown/AlterHscript"
+			},
+			{
+				"name": "hxcpp",
+				"link": "https://github.com/FunkinCrew/hxcpp"
+			}
+		]
+	}
+]
