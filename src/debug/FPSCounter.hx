@@ -21,11 +21,14 @@ class FPSCounter extends openfl.text.TextField {
 	 * The current memory usage (WARNING: this is NOT your total program memory usage, rather it shows the garbage collector memory)
 	 */
 	public var gcMEM(get, never):Float;
+
 	@:noCompletion function get_gcMEM():Float {
 		var mem:Float = openfl.system.System.totalMemoryNumber;
-		if (mem > gcPeakMEM) gcPeakMEM = mem;
+		if (mem > gcPeakMEM)
+			gcPeakMEM = mem;
 		return mem;
 	}
+
 	var gcPeakMEM:Float = 0;
 
 	@:noCompletion var lastText:String = null;
@@ -40,7 +43,7 @@ class FPSCounter extends openfl.text.TextField {
 		selectable = mouseEnabled = false;
 		text = "0FPS";
 		defaultTextFormat = new openfl.text.TextFormat(fontName, 12, -1);
-        defaultTextFormat.align = JUSTIFY;
+		defaultTextFormat.align = JUSTIFY;
 
 		sharpness = 100;
 		multiline = true;
@@ -53,6 +56,7 @@ class FPSCounter extends openfl.text.TextField {
 	}
 
 	var deltaTimeout:Float = .0;
+
 	override function __enterFrame(deltaTime:Float):Void {
 		if (!visible || flixel.FlxG.autoPause && !stage.nativeWindow.active) return;
 		fpsManager.update(deltaTime);

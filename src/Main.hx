@@ -8,7 +8,7 @@ class GameData {
 	@:default(480)
 	public var height:Int; // WINDOW height
 
-	public var initialState:flixel.util.typeLimit.NextState;  // initial game state
+	public var initialState:flixel.util.typeLimit.NextState; // initial game state
 
 	@:default(60)
 	public var framerate:Int; // default framerate

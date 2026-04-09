@@ -8,7 +8,7 @@ enum abstract AnsiStyle(Int) from Int to Int {
 	public var UNDERLINE:AnsiStyle = 4; // 4m
 	public var BLINK:AnsiStyle = 5; // 5m
 	public var BLINK_FAST:AnsiStyle = 6; // 6m
-	public var REVERSE:AnsiStyle  = 7; // 7m
+	public var REVERSE:AnsiStyle = 7; // 7m
 	public var HIDDEN:AnsiStyle = 8; // 8m
 	public var STRIKETHROUGH:AnsiStyle = 9; // 9m
 }
@@ -53,7 +53,7 @@ class Ansi {
 		91, // RED
 		95, // MAGENTA
 		93, // YELLOW
-		97  // WHITE
+		97 // WHITE
 	];
 
 	// Index 0..15 maps to OpenFL/Flixel ARGB colors
@@ -73,7 +73,7 @@ class Ansi {
 		0xFFFF0000, // RED
 		0xFFFF00FF, // MAGENTA
 		0xFFFFFF00, // YELLOW
-		0xFFFFFFFF  // WHITE
+		0xFFFFFFFF // WHITE
 	];
 
 	static function idx(c:AnsiColor):Int return (c:Int);

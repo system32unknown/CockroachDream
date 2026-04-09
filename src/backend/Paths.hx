@@ -3,37 +3,35 @@ package backend;
 import flixel.graphics.FlxGraphic;
 import openfl.system.System;
 import animate.FlxAnimateFrames;
-
 import utils.Util;
-
 import lime.utils.Assets as LimeAssets;
 import openfl.media.Sound;
-
 import openfl.display.BitmapData;
-
 import flixel.graphics.frames.FlxFramesCollection;
 import flixel.graphics.frames.FlxAtlasFrames;
 
 // credits to Chris Speciale (lead openfl maintainer) for giving me this abstract lmao
 // was a pain in the ass to deal with Dynamic
 abstract CachedAsset(Dynamic) {
-    // cast from FlxGraphic to CachedAsset
-    @:from static inline function fromFlxGraphic(graphic:FlxGraphic):CachedAsset {
-        return cast graphic;
-    }
-    // cast from Sound to CachedAsset
-    @:from static inline function fromSound(sound:Sound):CachedAsset {
-        return cast sound;
-    }
-    // cast from CachedAsset to FlxGraphic
-    @:to inline function toFlxGraphic():FlxGraphic {
-        return cast this;
-    }
+	// cast from FlxGraphic to CachedAsset
+	@:from static inline function fromFlxGraphic(graphic:FlxGraphic):CachedAsset {
+		return cast graphic;
+	}
 
-    // cast from CachedAsset to Sound
-    @:to inline function toSound():Sound {
-        return cast this;
-    }
+	// cast from Sound to CachedAsset
+	@:from static inline function fromSound(sound:Sound):CachedAsset {
+		return cast sound;
+	}
+
+	// cast from CachedAsset to FlxGraphic
+	@:to inline function toFlxGraphic():FlxGraphic {
+		return cast this;
+	}
+
+	// cast from CachedAsset to Sound
+	@:to inline function toSound():Sound {
+		return cast this;
+	}
 }
 
 // Original Code by Rudyrue.
@@ -65,7 +63,6 @@ class Paths {
 			// destroying method for graphics
 			case TClass(FlxGraphic):
 				var graphic:FlxGraphic = asset;
-
 				@:privateAccess
 				if (graphic.bitmap != null && graphic.bitmap.__texture != null)
 					graphic.bitmap.__texture.dispose();
@@ -89,7 +86,7 @@ class Paths {
 	// deload unused assets from memory
 	public static dynamic function clearUnusedMemory() {
 		for (key => asset in cachedAssets) {
-			if (localTrackedAssets.contains(key) || dumpExclusions.contains(key)) continue;	
+			if (localTrackedAssets.contains(key) || dumpExclusions.contains(key)) continue;
 			destroyAsset(key, asset);
 		}
 
@@ -132,7 +129,6 @@ class Paths {
 		graph.destroyOnNoUse = false;
 
 		cachedAssets.set(key, graph);
-		
 		return graph;
 	}
 
