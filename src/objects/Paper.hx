@@ -10,10 +10,11 @@ class Paper extends flixel.group.FlxSpriteContainer {
 	public override function new() {
 		super();
 
-		add(target = new FlxSprite(Paths.image('target')));
+		add(target = new FlxSprite(Paths.image('play/target')));
 
-		paper = new FlxSprite(Paths.image('paper'));
-		paper.frames = Paths.sparrowAtlas('paper');
+		final paperPath = 'play/paper';
+		paper = new FlxSprite(Paths.image(paperPath));
+		paper.frames = Paths.sparrowAtlas(paperPath);
 		paper.animation.addByPrefix('hit', 'hit', 24, false);
 		paper.centerOffsets(true);
 

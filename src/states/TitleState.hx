@@ -1,31 +1,31 @@
 package states;
 
-import objects.Cockroach;
+import flixel.ui.FlxButton;
+import flixel.graphics.FlxGraphic;
 
-class TitleState extends flixel.FlxState {
+class TitleState extends flixel.addons.transition.FlxTransitionableState {
 	override public function create() {
 		super.create();
 
-		FlxG.mouse.visible = false;
-
 		var bg:FlxSprite = new FlxSprite(Paths.image('bg'));
 		bg.setGraphicSize(FlxG.width, FlxG.height);
-		bg.screenCenter();
+		bg.gameCenter();
 		add(bg);
 
-		var collision:FlxSprite = new FlxSprite(Paths.image('collision'));
-		collision.alpha = 0;
-		add(collision);
+		var title:FlxSprite = new FlxSprite(Paths.image('title/title'));
+		title.gameCenter(X).y = 40;
+		add(title);
 
-		var text:FlxText = new FlxText("Not yet done.");
-		text.setFormat(16, LEFT);
-		text.y = FlxG.height - text.height;
-		add(text);
+		var click1:FlxGraphic = Paths.image('title/click1');
+		var click2:FlxGraphic = Paths.image('title/click2');
 
-		var test:objects.Cockroach = new Cockroach(0, 0);
-		test.appear();
-		add(test);
-
-		add(new objects.Paper());
+		var clickBtn:FlxButton = new FlxButton(280, 264, "", () -> {
+			FlxG.switchState(() -> new PlayState());
+		});
+		clickBtn.loadGraphic(click1);
+		clickBtn.onOver.callback = () -> clickBtn.loadGraphic(click2);
+		clickBtn.onOut.callback = () -> clickBtn.loadGraphic(click1);
+		clickBtn.gameCenter(X);
+		add(clickBtn);
 	}
 }

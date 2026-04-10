@@ -1,5 +1,9 @@
 package;
 
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.transition.TransitionData;
+import flixel.graphics.FlxGraphic;
+
 #if DEBUG_TRACY
 import cpp.vm.tracy.TracyProfiler;
 import openfl.events.Event;
@@ -35,7 +39,26 @@ class Init extends flixel.FlxState {
 			FlxG.game.focusLostFramerate = 60;
 			FlxG.keys.preventDefaultKeys = [TAB];
 			FlxG.cameras.useBufferLocking = true;
-			FlxG.inputs.resetOnStateSwitch = false;
+
+			// Diamond Transition setup
+			var diamond:FlxGraphic = FlxGraphic.fromClass(flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond);
+			diamond.persist = true;
+			diamond.destroyOnNoUse = false;
+
+			// NOTE: tileData is ignored if type is FADE
+			var tileData:TransitionTileData = {asset: diamond, width: 32, height: 32};
+
+			// Reusable function
+			function updateTransitions():Void {
+				FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, .7, FlxPoint.get(), tileData);
+				FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, .7, FlxPoint.get(), tileData);
+			}
+
+			// Initial setup
+			updateTransitions();
+
+			// Handle resize
+			FlxG.signals.gameResized.add((_, _) -> updateTransitions());
 
 			#if CRASH_HANDLER debug.CrashHandler.init(); #end
 			_coreInitialized = true;

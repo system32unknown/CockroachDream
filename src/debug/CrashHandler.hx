@@ -67,9 +67,7 @@ class CrashHandler {
 		errMsg += '\nPlatform: ${System.platformLabel} ${System.platformVersion}';
 		errMsg += '\nFlixel Current State: ${Type.getClassName(Type.getClass(FlxG.state))}';
 		errMsg += '\nUncaught Error: $message';
-		#if macro
-		errMsg += '\nHaxe: ${defines['haxe']} / Flixel: ${defines['flixel']}\nOpenFL: ${defines['openfl']} / Lime: ${defines['lime']}';
-		#end
+		errMsg += '\nHaxe: ${defines['haxe']} / Flixel: ${defines['flixel']} / OpenFL: ${defines['openfl']} / Lime: ${defines['lime']}';
 
 		try {
 			if (!FileSystem.exists("./crash/")) FileSystem.createDirectory("./crash/");
@@ -79,8 +77,7 @@ class CrashHandler {
 			Sys.println('Crash dump saved in ${haxe.io.Path.normalize(path)}');
 		} catch (e:Dynamic) Sys.println('Error!\nCouldn\'t save the crash dump because:\n$e');
 
-		FlxG.stage.application.window.alert("Crash Handler", errMsg);
-		#if DISCORD_ALLOWED DiscordClient.shutdown(); #end
+		utils.system.NativeUtil.showMessageBox("Crash!!!", errMsg, MSG_ERROR);
 		System.exit(1);
 	}
 

@@ -1,6 +1,5 @@
 package macros;
 
-@:nullSafety
 class DefinesMacro {
 	/**
 	 * Returns the defined values
