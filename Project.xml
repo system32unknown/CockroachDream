@@ -60,6 +60,14 @@
 	<haxeflag name="--macro" value="allowPackage('flash')"/>
 	<haxeflag name="--macro" value="include('my.pack')"/>
 
+	<!--Tracy profiler stuff-->
+	<section if="DEBUG_TRACY">
+		<haxedef name="HXCPP_TELEMETRY"/>
+		<haxedef name="HXCPP_TRACY"/>
+		<haxedef name="HXCPP_TRACY_MEMORY"/>
+		<haxedef name="HXCPP_TRACY_ON_DEMAND"/>
+	</section>
+
 	<section if="CRASH_HANDLER cpp">
 		<haxedef name="HXCPP_CHECK_POINTER"/>
 		<haxedef name="HXCPP_STACK_LINE"/>

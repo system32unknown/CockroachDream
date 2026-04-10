@@ -4,7 +4,7 @@ import flixel.graphics.FlxGraphic;
 import openfl.system.System;
 import animate.FlxAnimateFrames;
 import utils.Util;
-import lime.utils.Assets as LimeAssets;
+import utils.system.MemoryUtil;
 import openfl.media.Sound;
 import openfl.display.BitmapData;
 import flixel.graphics.frames.FlxFramesCollection;
@@ -72,7 +72,7 @@ class Paths {
 			// destroying method for sounds
 			case TClass(Sound):
 				(asset:Sound).close();
-				LimeAssets.cache.clear(key);
+				lime.utils.Assets.cache.clear(key);
 
 			// if grabbed asset doesn't exist then we stop the function
 			default:
@@ -90,7 +90,7 @@ class Paths {
 			destroyAsset(key, asset);
 		}
 
-		System.gc();
+		MemoryUtil.clearMajor(true);
 	}
 
 	// clear all assets from memory
@@ -101,7 +101,7 @@ class Paths {
 		}
 
 		localTrackedAssets = [];
-		System.gc();
+		MemoryUtil.clearMajor(true);
 	}
 
 	public static function get(path:String, ?subFolder:String):String {
@@ -114,7 +114,7 @@ class Paths {
 	// images
 	public static dynamic function image(key:String, ?subFolder:String = 'images'):FlxGraphic {
 		key = Util.addFileExtension(key, IMAGE_EXT);
-		key = Paths.get(key, subFolder);
+		key = get(key, subFolder);
 
 		if (cachedAssets.exists(key)) return cachedAssets.get(key);
 		if (!FileSystem.exists(key)) return null;
@@ -145,7 +145,7 @@ class Paths {
 
 	public static dynamic function audio(key:String, ?subFolder:String, ?beepIfNull:Bool = true):Sound {
 		key = Util.addFileExtension(key, SOUND_EXT);
-		key = Paths.get(key, subFolder);
+		key = get(key, subFolder);
 
 		var file:Sound = null;
 

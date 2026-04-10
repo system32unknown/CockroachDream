@@ -18,6 +18,10 @@
 				"link": "https://github.com/MaybeMaru/flixel-animate"
 			},
 			{
+				"name": "flixel-addons",
+				"link": "https://github.com/system32unknown/flixel-addons"
+			},
+			{
 				"name": "hscript-improved",
 				"link": "https://github.com/system32unknown/AlterHscript"
 			},

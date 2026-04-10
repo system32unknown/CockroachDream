@@ -56,7 +56,7 @@ class FPSCounter extends openfl.text.TextField {
 
 	var deltaTimeout:Float = .0;
 	override function __enterFrame(deltaTime:Float):Void {
-		if (!visible || flixel.FlxG.autoPause && !stage.nativeWindow.active) return;
+		if (!visible || FlxG.autoPause && !stage.nativeWindow.active) return;
 		fpsManager.update(deltaTime);
 		preUpdateText();
 

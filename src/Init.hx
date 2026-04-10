@@ -45,13 +45,11 @@ class Init extends flixel.FlxState {
 			diamond.persist = true;
 			diamond.destroyOnNoUse = false;
 
-			// NOTE: tileData is ignored if type is FADE
-			var tileData:TransitionTileData = {asset: diamond, width: 32, height: 32};
-
 			// Reusable function
 			function updateTransitions():Void {
-				FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, .7, FlxPoint.get(), tileData);
-				FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, .7, FlxPoint.get(), tileData);
+				var defaultData:TransitionData = new TransitionData(FADE, FlxColor.BLACK, .7, FlxPoint.get(), {asset: diamond, width: 32, height: 32});
+				FlxTransitionableState.defaultTransIn = defaultData;
+				FlxTransitionableState.defaultTransOut = defaultData;
 			}
 
 			// Initial setup

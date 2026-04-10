@@ -1,7 +1,6 @@
 package states;
 
 import objects.Cockroach;
-import flixel.group.FlxGroup.FlxTypedGroup;
 
 typedef HitRow = {
 	var st1:Int;
@@ -47,28 +46,20 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 
 		if (y >= 0 && y < FlxG.height) {
 			var row:HitRow = hitArray[y];
-			if (x > row.st1 && x < row.ed1) return true;
-			if (x > row.st2 && x < row.ed2) return true;
-			if (x > row.st3 && x < row.ed3) return true;
+			if ((x > row.st1 && x < row.ed1) || (x > row.st2 && x < row.ed2) || (x > row.st3 && x < row.ed3)) return true;
 		}
-
 		return false;
 	}
 
 	public function buildHitArray(hitSprite:FlxSprite):Void {
-		hitArray = [];
-
-		for (i in 0...FlxG.height) {
-			hitArray.push({st1: 0, ed1: 0, st2: 0, ed2: 0, st3: 0, ed3: 0});
-		}
+		for (_ in 0...FlxG.height) hitArray.push({st1: 0, ed1: 0, st2: 0, ed2: 0, st3: 0, ed3: 0});
 
 		for (i in 80...FlxG.height) {
 			var c:Int = 0;
 			var h:Bool = false;
 
 			for (j in 160...FlxG.height) {
-				var pixel:Int = hitSprite.pixels.getPixel32(j, i);
-				if ((pixel >> 24) != 0) {
+				if ((hitSprite.pixels.getPixel32(j, i) >> 24) != 0) {
 					if (!h) {
 						c++;
 
@@ -118,8 +109,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 		add(roachGroup = new FlxTypedGroup<Cockroach>());
 
 		for (i in 0...ROACHES_MAX) {
-			var roach:Cockroach = new Cockroach(0, 0);
-			roachGroup.add(roach);
+			roachGroup.add(new Cockroach());
 		}
 
 		add(new objects.Paper());
@@ -180,14 +170,10 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 	}
 
 	function handleClick():Void {
-		if (!FlxG.mouse.justPressed)
-			return;
+		if (!FlxG.mouse.justPressed) return;
 
-		var mx = FlxG.mouse.x;
-		var my = FlxG.mouse.y;
-
-		// Tap effect
-		// playTapEffect(mx, my);
+		var mx:Int = FlxG.mouse.x;
+		var my:Int = FlxG.mouse.y;
 
 		var hit:Bool = false;
 		var w:Int = 24;
