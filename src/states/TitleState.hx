@@ -4,8 +4,13 @@ import flixel.ui.FlxButton;
 import flixel.graphics.FlxGraphic;
 
 class TitleState extends flixel.addons.transition.FlxTransitionableState {
-	override public function create() {
+	override public function create():Void {
 		super.create();
+
+		if (FlxG.sound.music == null) {
+			FlxG.sound.playMusic(Paths.music('title'), null, 0);
+			FlxG.sound.music.fadeIn();
+		}
 
 		var bg:FlxSprite = new FlxSprite(Paths.image('bg'));
 		bg.setGraphicSize(FlxG.width, FlxG.height);
@@ -19,9 +24,7 @@ class TitleState extends flixel.addons.transition.FlxTransitionableState {
 		var click1:FlxGraphic = Paths.image('title/click1');
 		var click2:FlxGraphic = Paths.image('title/click2');
 
-		var clickBtn:FlxButton = new FlxButton(280, 264, "", () -> {
-			FlxG.switchState(() -> new PlayState());
-		});
+		var clickBtn:FlxButton = new FlxButton(280, 264, "", () -> FlxG.switchState(() -> new PlayState()));
 		clickBtn.loadGraphic(click1);
 		clickBtn.onOver.callback = () -> clickBtn.loadGraphic(click2);
 		clickBtn.onOut.callback = () -> clickBtn.loadGraphic(click1);

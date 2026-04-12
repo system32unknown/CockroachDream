@@ -104,7 +104,7 @@ class Cockroach extends FlxSprite {
 
 				if (PlayState.instance.checkHit(x, y)) PlayState.instance.tell_touch();
 				if (cnt > wait_max) {
-					if (FlxG.random.float(0, 4) > 1) dir = getDir(x, y, 320, 240); // go toward center
+					if (FlxG.random.int(0, 4) > 1) dir = getDir(x, y, 320, 240); // go toward center
 					else dir = FlxMath.wrap(dir + (FlxG.random.bool() ? 1 : -1), 0, 7); // random turn
 
 					spd = spd_max;
