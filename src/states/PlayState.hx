@@ -96,6 +96,9 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 	var stressbar:StressBar;
 	var face:Face;
 
+	var botplayTxt:FlxText;
+	var botPlay:Bool = true;
+
 	override public function create() {
 		super.create();
 		FlxG.mouse.visible = false;
@@ -122,6 +125,13 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 		stressbar = new StressBar(0, 457);
 		stressbar.scrollFactor.set();
 		add(stressbar);
+
+		botplayTxt = new FlxText(400, stressbar.y - 30, FlxG.width - 800, "BOTPLAY", 16);
+		botplayTxt.setFormat(botplayTxt.size, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+		botplayTxt.scrollFactor.set();
+		botplayTxt.visible = botPlay;
+		botplayTxt.gameCenter(X);
+		add(botplayTxt);
 
 		instance = this;
 	}
