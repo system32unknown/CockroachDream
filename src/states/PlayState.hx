@@ -1,6 +1,8 @@
 package states;
 
+import objects.Face;
 import objects.Cockroach;
+import objects.StressBar;
 
 typedef HitRow = {
 	var st1:Int;
@@ -91,6 +93,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 	}
 
 	var roachGroup:FlxTypedGroup<Cockroach>;
+	var stressbar:StressBar;
+	var face:Face;
 
 	override public function create() {
 		super.create();
@@ -106,13 +110,18 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 		add(collision);
 		buildHitArray(collision);
 
-		add(roachGroup = new FlxTypedGroup<Cockroach>());
+		face = new Face(270, 100);
+		face.scrollFactor.set();
+		add(face);
 
-		for (i in 0...ROACHES_MAX) {
-			roachGroup.add(new Cockroach());
-		}
+		add(roachGroup = new FlxTypedGroup<Cockroach>());
+		for (i in 0...ROACHES_MAX) roachGroup.add(new Cockroach());
 
 		add(new objects.Paper());
+
+		stressbar = new StressBar(0, 457);
+		stressbar.scrollFactor.set();
+		add(stressbar);
 
 		instance = this;
 	}
@@ -120,10 +129,10 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 	override public function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (!gameover) {
-			handleSpawn();
-			handleStress();
-		}
+		if (gameover) return;
+
+		handleSpawn();
+		handleStress();
 		handleClick();
 	}
 
@@ -149,24 +158,27 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 
 			stress++;
 
-			// mcStress.add_stress(...)
-			// updateStressBar();
+			stressbar.bar.percent = 100 * (stress / stress_max);
 
-			var lev:Int = Std.int(stress / (stress_max / 6));
+			var lev:Int = Math.floor(stress / (stress_max / 6));
 			if (lev > 6) lev = 6;
 
 			if (lev != face_lev) {
 				face_lev = lev;
-				// updateFace(lev);
+				face.gotoLev(face_lev);
 			}
 
 			if (stress >= stress_max) {
 				gameover = true;
-				// onGameOver();
+				onGameOver();
 			}
 
 			beat_interval = 6 - lev;
 		}
+	}
+
+	function onGameOver():Void {
+		
 	}
 
 	function handleClick():Void {
