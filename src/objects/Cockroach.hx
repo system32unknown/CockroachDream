@@ -136,6 +136,7 @@ class Cockroach extends FlxSprite {
 	function updateMove():Void {
 		x += addx[dir] * spd;
 		y += addy[dir] * spd;
+
 		updatePatAnimation(1 + dir * 8 + 4 + pat);
 		pat++;
 		if (pat >= 3) pat = 0;
@@ -148,6 +149,8 @@ class Cockroach extends FlxSprite {
 	}
 
 	public function hit():Void {
+		if (!hit_ok) return;
+
 		state = HIT;
 		hit_ok = false;
 		originalY = y;
