@@ -111,7 +111,9 @@ class Cockroach extends FlxSprite {
 					state = MOVE;
 				} else runaway();
 			case MOVE:
-				velocity.set(addx[dir] * spd * 60, addy[dir] * spd * 60);
+				x += addx[dir] * spd;
+				y += addy[dir] * spd;
+
 				cockFrame = 4 + pat;
 
 				pat++;
@@ -119,7 +121,7 @@ class Cockroach extends FlxSprite {
 				if (PlayState.instance.checkHit(x, y)) PlayState.instance.tell_touch();
 				
 				cnt++;
-				if(cnt >= cnt_max) {
+				if (cnt >= cnt_max) {
 					if (x < 0 || x > FlxG.width || y < 0 || y > FlxG.height) appear();
 					else state = STOP;
 				}
