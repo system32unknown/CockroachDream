@@ -2,26 +2,30 @@ package objects;
 
 import states.PlayState;
 
-enum Roach_States {
-	IDLE;
-	STOP;
-	MOVE;
-	HIT;
+enum abstract RoachStates(String) from String to String {
+	var IDLE:RoachStates = "idle";
+	var STOP:RoachStates = "stop";
+	var MOVE:RoachStates = "move";
+	var HIT:RoachStates = "hit";
 }
 
 class Cockroach extends FlxSprite {
-	public var state:Roach_States = IDLE;
+	final RNG_FPS:Float = 15;
+	public var state:RoachStates = IDLE;
 
 	public var hit_ok:Bool = false;
 
 	public var spd:Float = 0;
 	public var spd_max:Int = 0;
 	public var dir:Int = 0;
-
-	public var cnt:Int = 0;
-	public var cnt_max:Int = 0;
+	
 	public var pat:Int = 0;
-	public var wait_max:Int = 0;
+
+	public var cnt:Float = 0.0;
+	var animTimer:Float = 0.0;
+
+	public var cnt_max:Float = 0.0;
+	public var wait_max:Float = 0.0;
 
 	var originalY:Float = 0.0;
 	var yadd:Float = 0.0;
@@ -39,7 +43,7 @@ class Cockroach extends FlxSprite {
 
 		spd = spd_max = 0;
 		cnt = pat = 0;
-		wait_max = cnt_max = 0;
+		wait_max = cnt_max = 0.0;
 
 		initDirections();
 		state = IDLE;
@@ -55,7 +59,7 @@ class Cockroach extends FlxSprite {
 			default: setPosition(FlxG.random.float(0, FlxG.width), -24);
 		}
 
-		spd_max = 4 + FlxG.random.int(0, 5);
+		spd_max = FlxG.random.int(2, 6);
 		dir = getDir(x, y, 320, 240);
 		enterStop();
 	}
@@ -88,13 +92,14 @@ class Cockroach extends FlxSprite {
 		if (my > y + range) return;
 		dir = getDir(mx, my, x, y);
 
-		spd = 7 + FlxG.random.int(0, 5);
+		spd = FlxG.random.int(6, 10);
 		enterMove();
 	}
 
 	function initDirections():Void {
-		for (i in 0...8) {
-			var rotation:Float = Math.PI * (i * 2 + 1) / 8;
+		final MAX_DIR:Int = 8;
+		for (i in 0...MAX_DIR) {
+			var rotation:Float = Math.PI * (i * 2 + 1) / MAX_DIR;
 			addx.push(-Math.sin(rotation));
 			addy.push(-Math.cos(rotation));
 		}
@@ -102,14 +107,18 @@ class Cockroach extends FlxSprite {
 
 	function enterStop():Void {
 		state = STOP;
-		wait_max = 50 + FlxG.random.int(0, 50);
+		wait_max = FlxG.random.float(50, 100) / 30;
+		animTimer = 0.0;
 		cnt = pat = 0;
 	}
 
-	function updateStop():Void {
+	function updateStop(e:Float):Void {
 		updatePatAnimation(1 + dir * 8 + pat);
-		cnt++;
-		if (cnt % 3 == 0) {
+		cnt += e;
+
+		animTimer += e;
+		if (animTimer > .1) {
+			animTimer = 0;
 			pat++;
 			if (pat >= 4) pat = 0;
 		}
@@ -129,11 +138,11 @@ class Cockroach extends FlxSprite {
 
 	function enterMove():Void {
 		state = MOVE;
-		cnt_max = 10 + FlxG.random.int(0, 20);
+		cnt_max = FlxG.random.float(10, 30) / RNG_FPS;
 		cnt = pat = 0;
 	}
 
-	function updateMove():Void {
+	function updateMove(e:Float):Void {
 		x += addx[dir] * spd;
 		y += addy[dir] * spd;
 
@@ -141,9 +150,10 @@ class Cockroach extends FlxSprite {
 		pat++;
 		if (pat >= 3) pat = 0;
 		if (PlayState.instance.checkHit(x, y)) PlayState.instance.tell_touch();
-		cnt++;
+
+		cnt += e;
 		if (cnt >= cnt_max) {
-			if (x < 0 || x > 640 || y < 0 || y > 480) appear();
+			if (x < 0 || x > FlxG.width || y < 0 || y > FlxG.height) appear();
 			else enterStop();
 		}
 	}
@@ -156,18 +166,20 @@ class Cockroach extends FlxSprite {
 		originalY = y;
 		yadd = -28;
 		cnt = 0;
+		animTimer = 0.0;
 		dir = FlxG.random.int(0, 8);
 	}
 
-	function updateHit():Void {
+	function updateHit(e:Float):Void {
 		y += yadd;
 		if (y > originalY) y = originalY;
 		yadd += 5;
 		dir++;
 		if (dir >= 8) dir = 0;
 		updatePatAnimation(1 + dir * 8 + 7);
-		cnt++;
-		if (cnt > 30) {
+
+		animTimer += e;
+		if (animTimer >= .5) {
 			updatePatAnimation(1 + dir * 8 + 6);
 			state = IDLE;
 		}
@@ -181,9 +193,9 @@ class Cockroach extends FlxSprite {
 		super.update(elapsed);
 		switch (state) {
 			case IDLE:
-			case STOP: updateStop();
-			case MOVE: updateMove();
-			case HIT: updateHit();
+			case STOP: updateStop(elapsed);
+			case MOVE: updateMove(elapsed);
+			case HIT: updateHit(elapsed);
 		}
 	}
 }

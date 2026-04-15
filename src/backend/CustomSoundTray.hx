@@ -31,7 +31,7 @@ class CustomSoundTray extends flixel.system.ui.FlxSoundTray {
 		_label.multiline = true;
 		_label.selectable = false;
 
-		var dtf:TextFormat = new TextFormat("VCR OSD Mono", 10, FlxColor.WHITE);
+		var dtf:TextFormat = new TextFormat("_sans", 10, FlxColor.WHITE);
 		dtf.align = openfl.text.TextFormatAlign.CENTER;
 		_label.defaultTextFormat = dtf;
 		addChild(_label);

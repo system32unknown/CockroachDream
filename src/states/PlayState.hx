@@ -3,6 +3,9 @@ package states;
 import objects.Face;
 import objects.Cockroach;
 import objects.StressBar;
+import objects.Paper;
+
+import substates.ResultSubstate;
 
 typedef HitRow = {
 	var st1:Int;
@@ -22,12 +25,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 	public var goki_touch:Bool = false;
 	public var face_lev:Int = -1;
 
-	public var goki_dead:Int = 0;
+	public var roach_dead:Int = 0;
 	public var gameover:Bool = false;
-
-	public var beat_cnt:Int = 0;
-	public var beat_interval:Int = 7;
-	public var beat_ic:Int = 0;
 
 	public var appear_cnt:Int = 0;
 	public var appear_interval:Float = 80;
@@ -98,6 +97,16 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 
 	var botplayTxt:FlxText;
 	var botPlay:Bool = true;
+	var noStress:Bool = true;
+
+	var paper:Paper;
+
+	override public function new() {
+		super();
+
+		paper = new Paper();
+		paper.target.visible = false;
+	}
 
 	override public function create() {
 		super.create();
@@ -120,7 +129,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 		add(roachGroup = new FlxTypedGroup<Cockroach>());
 		for (i in 0...ROACHES_MAX) roachGroup.add(new Cockroach());
 
-		add(new objects.Paper());
+		add(paper);
+		paper.target.visible = true;
 
 		stressbar = new StressBar(0, 457);
 		stressbar.scrollFactor.set();
@@ -163,11 +173,12 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 	}
 
 	function handleStress():Void {
+		if (noStress) return;
+
 		if (goki_touch) {
 			goki_touch = false;
 
 			stress++;
-
 			stressbar.bar.percent = 100 * (stress / stress_max);
 
 			var lev:Int = Math.floor(stress / (stress_max / 6));
@@ -182,13 +193,22 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 				gameover = true;
 				onGameOver();
 			}
-
-			beat_interval = 6 - lev;
 		}
 	}
 
 	function onGameOver():Void {
-		
+		openSubState(new ResultSubstate());
+	}
+	function onClear():Void {
+		var result:ResultSubstate = new ResultSubstate();
+		result.isVictory = true;
+		openSubState(result);
+	}
+
+	override function openSubState(SubState:FlxSubState) {
+		super.openSubState(SubState);
+		FlxG.mouse.visible = true;
+		paper.target.visible = false;
 	}
 
 	function handleClick():Void {
@@ -200,13 +220,11 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 		var hit:Bool = false;
 		var w:Int = 24;
 
-		for (i in 0...goki_num) {
-			var g:Cockroach = roachGroup.members[i];
-
-			if (g.hit_ok) {
-				if (mx >= g.x - w && mx <= g.x + w && my >= g.y - w && my <= g.y + w) {
-					g.hit();
-					goki_dead++;
+		for (cockroach in roachGroup) {
+			if (cockroach.hit_ok) {
+				if (mx >= cockroach.x - w && mx <= cockroach.x + w && my >= cockroach.y - w && my <= cockroach.y + w) {
+					cockroach.hit();
+					roach_dead++;
 					hit = true;
 				}
 			}
@@ -215,8 +233,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState {
 		if (hit) {
 			// updateKillCount();
 
-			if (goki_dead >= ROACHES_MAX) {
-				// onClear();
+			if (roach_dead >= ROACHES_MAX) {
+				onClear();
 			}
 
 			FlxG.sound.play(Paths.audio('sounds/hit'));

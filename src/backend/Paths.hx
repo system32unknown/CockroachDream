@@ -1,7 +1,6 @@
 package backend;
 
 import flixel.graphics.FlxGraphic;
-import openfl.system.System;
 import animate.FlxAnimateFrames;
 import utils.Util;
 import utils.system.MemoryUtil;

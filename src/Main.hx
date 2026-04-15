@@ -1,5 +1,6 @@
 package;
 
+import debug.FPSCounter;
 import openfl.Lib;
 
 @:structInit
@@ -22,6 +23,8 @@ class Main extends openfl.display.Sprite {
 		startFullscreen: false
 	};
 
+	public static var fpsVar:FPSCounter;
+
 	public function new() {
 		super();
 
@@ -29,6 +32,10 @@ class Main extends openfl.display.Sprite {
 
 		var curStage:openfl.display.Stage = Lib.current.stage;
 		addChild(new backend.CustomGame(() -> new Init(), Std.int(curStage.width), Std.int(curStage.height), Std.int(curStage.frameRate), game.skipSplash, game.startFullscreen));
-		addChild(new debug.FPSCounter());
+		addChild(fpsVar = new FPSCounter());
+
+		FlxG.signals.preStateSwitch.add(() -> if (Settings.data.autoCleanAssets) Paths.clearStoredMemory());
+		FlxG.signals.postStateSwitch.add(() -> Paths.clearUnusedMemory());
+		FlxG.signals.gameResized.add((w:Int, _:Int) -> @:privateAccess FlxG.game.soundTray._defaultScale = (w / FlxG.width) * 2);
 	}
 }

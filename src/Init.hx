@@ -54,6 +54,7 @@ class Init extends flixel.FlxState {
 
 			// Initial setup
 			updateTransitions();
+			Settings.load();
 
 			// Handle resize
 			FlxG.signals.gameResized.add((_, _) -> updateTransitions());

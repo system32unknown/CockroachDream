@@ -31,7 +31,7 @@ class TitleState extends flixel.addons.transition.FlxTransitionableState {
 		clickBtn.gameCenter(X);
 		add(clickBtn);
 
-		var clickOpt:FlxButton = new FlxButton(280, clickBtn.y + 20, "Options", () -> FlxG.switchState(() -> new PlayState()));
+		var clickOpt:FlxButton = new FlxButton(280, clickBtn.y + 20, "Options", () -> openSubState(new substates.OptionSubstate()));
 		clickOpt.gameCenter(X);
 		add(clickOpt);
 	}

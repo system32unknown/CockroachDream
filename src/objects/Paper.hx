@@ -2,9 +2,10 @@ package objects;
 
 class Paper extends flixel.group.FlxSpriteContainer {
 	var paper:FlxSprite;
-	var target:FlxSprite;
+	public var target:FlxSprite;
 
 	var targetMouseOffset:FlxPoint = FlxPoint.get(24, 24);
+	var paperMouseOffset:FlxPoint = FlxPoint.get(13, 39);
 	var originalYOffset:Float = 0.0;
 
 	public override function new() {
@@ -12,9 +13,9 @@ class Paper extends flixel.group.FlxSpriteContainer {
 
 		add(target = new FlxSprite(Paths.image('play/target')));
 
-		final paperPath = 'play/paper';
-		paper = new FlxSprite(Paths.image(paperPath));
-		paper.frames = Paths.sparrowAtlas(paperPath);
+		final PAPER_PATH:String = 'play/paper';
+		paper = new FlxSprite(Paths.image(PAPER_PATH));
+		paper.frames = Paths.sparrowAtlas(PAPER_PATH);
 		paper.animation.addByPrefix('hit', 'hit', 24, false);
 		paper.centerOffsets(true);
 
@@ -33,7 +34,7 @@ class Paper extends flixel.group.FlxSpriteContainer {
 		target.setPosition(FlxG.mouse.x - targetMouseOffset.x, FlxG.mouse.y - targetMouseOffset.y);
 
 		if (FlxG.mouse.justPressed) {
-			paper.setPosition(FlxG.mouse.x - 13, FlxG.mouse.y - 39);
+			paper.setPosition(FlxG.mouse.x - paperMouseOffset.x, FlxG.mouse.y - paperMouseOffset.y);
 
 			paper.offset.y = originalYOffset;
 			paper.animation.play('hit', true);
